@@ -8,6 +8,8 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/dghubble/go-twitter/twitter"
+	"github.com/dghubble/oauth1"
 	bitly "github.com/retgits/bitly/client"
 	"github.com/retgits/bitly/client/bitlinks"
 )
@@ -18,17 +20,17 @@ const (
 )
 
 type item struct {
-	program_name   string
-	policy_url     string
-	submission_url string
-	launch_date    string
-	bug_bounty     bool
-	swag           bool
-	hall_of_fame   bool
-	safe_harbor    string
+	program_name   string `json:"program_name"`
+	policy_url     string `json:"policy_url"`
+	submission_url string `json:"submission_url"`
+	launch_date    string `json:"launch_date"`
+	bug_bounty     bool   `json:"bug_bounty"`
+	swag           bool   `json:"swag"`
+	hall_of_fame   bool   `json:"hall_of_fame"`
+	safe_harbor    string `json:"safee_harbor"`
 }
 
-func get_bitly_client() *bitlinks.Bitlinks {
+func getBitlyClient() *bitlinks.Bitlinks {
 	dat, err := exec.Command("./bitly_access_token.sh").Output()
 
 	if err != nil {
@@ -39,7 +41,6 @@ func get_bitly_client() *bitlinks.Bitlinks {
 	return bitlinks.New(client)
 }
 
-// TODO should this accept a url to shorten to as cli arg ?
 func main() {
 	resp, err := http.Get("https://raw.githubusercontent.com/disclose/disclose/master/program-list/program-list.json")
 
@@ -60,13 +61,13 @@ func main() {
 		panic(err)
 	}
 
-	bt_client := get_bitly_client()
+	btClient := getBitlyClient()
 
 	request := bitlinks.ShortenRequest{
 		LongURL: url2Shorten,
 	}
 
-	bitlyRes, err := bt_client.ShortenLink(&request)
+	bitlyRes, err := btClient.ShortenLink(&request)
 	if err != nil {
 		panic(err)
 	}
@@ -79,11 +80,11 @@ func main() {
 	SAFE_HARBOUR_FULL := 0.0
 	SAFE_HARBOUR_PARTIAL := 0.0
 
-	for _, i := range jsonFeed {
-		bounty := i.bug_bounty
-		swag := i.swag
-		hall_of_fame := i.hall_of_fame
-		safe_harbor := i.safe_harbor
+	for _, item := range jsonFeed {
+		bounty := item.bug_bounty
+		swag := item.swag
+		hall_of_fame := item.hall_of_fame
+		safe_harbor := item.safe_harbor
 		if bounty {
 			BOUNTY++
 		}
@@ -113,7 +114,9 @@ func main() {
 		fmt.Println("Could not read message content file")
 		panic(err)
 	}
+
 	rawMessage := string(dat)
+
 	replacements := map[string]string{
 		"{{MAIN_LINK}}":                    MAIN_LINK,
 		"{{BOUNTY}}":                       fmt.Sprintf("%.0fi", BOUNTY),
@@ -135,6 +138,17 @@ func main() {
 
 	tweetContent := rawMessage
 
-	exec.Command("perl", "oysttyer.pl", "-status=\""+tweetContent+"\"").Run()
-	fmt.Println(tweetContent)
+	config := oauth1.NewConfig("consumerKey", "consumerSecret")
+	token := oauth1.NewToken("accessToken", "accessSecret")
+	httpClient := config.Client(oauth1.NoContext, token)
+
+	twitterClient := twitter.NewClient(httpClient)
+
+	tweet, resp, err := twitterClient.Statuses.Update(tweetContent, nil)
+	if err != nil {
+		fmt.Println("Error sending tweet")
+		panic(err)
+	}
+
+	fmt.Println(tweet)
 }
