@@ -29,7 +29,8 @@ type item struct {
 }
 
 func get_bitly_client() *bitlinks.Bitlinks {
-	dat, err := ioutil.ReadFile("./bitly_access_token.sh")
+	dat, err := exec.Command("./bitly_access_token.sh").Output()
+
 	if err != nil {
 		fmt.Println("Could not read from bitly access token file")
 		panic(err)
@@ -134,7 +135,7 @@ func main() {
 
 	tweetContent := rawMessage
 
-	exec.Command("perl", "oysttyer.pl", "-status=\""+tweetContent+"\"")
+	exec.Command("perl", "oysttyer.pl", "-status=\""+tweetContent+"\"").Run()
 	fmt.Println(tweetContent)
 }
 
