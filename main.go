@@ -72,12 +72,12 @@ func main() {
 	}
 
 	MAIN_LINK := bitlyRes.Link
-	TOTAL_PROGRAMS := len(jsonFeed)
-	BOUNTY := 0
-	SWAG := 0
-	HALL_OF_FAME := 0
-	SAFE_HARBOUR_FULL := 0
-	SAFE_HARBOUR_PARTIAL := 0
+	TOTAL_PROGRAMS := float64(len(jsonFeed))
+	BOUNTY := 0.0
+	SWAG := 0.0
+	HALL_OF_FAME := 0.0
+	SAFE_HARBOUR_FULL := 0.0
+	SAFE_HARBOUR_PARTIAL := 0.0
 
 	for _, i := range jsonFeed {
 		bounty := i.bug_bounty
@@ -101,7 +101,7 @@ func main() {
 			SAFE_HARBOUR_PARTIAL++
 		}
 	}
-	// TODO do float divison here
+
 	BOUNTY_PERCENT := (BOUNTY / TOTAL_PROGRAMS) * 100
 	SAFE_HARBOUR_FULL_PERCENT := (SAFE_HARBOUR_FULL / TOTAL_PROGRAMS) * 100
 	SAFE_HARBOUR_PARTIAL_PERCENT := (SAFE_HARBOUR_PARTIAL / TOTAL_PROGRAMS) * 100
@@ -116,16 +116,16 @@ func main() {
 	rawMessage := string(dat)
 	replacements := map[string]string{
 		"{{MAIN_LINK}}":                    MAIN_LINK,
-		"{{BOUNTY}}":                       fmt.Sprintf("%i", BOUNTY),
+		"{{BOUNTY}}":                       fmt.Sprintf("%.0fi", BOUNTY),
 		"{{BOUNTY_PERCENT}}":               fmt.Sprintf("%.5f", BOUNTY_PERCENT) + "%",
-		"{{TOTAL_PROGRAMS}}":               fmt.Sprintf("%i", TOTAL_PROGRAMS),
-		"{{SAFE_HARBOUR_FULL}}":            fmt.Sprintf("%i", SAFE_HARBOUR_FULL),
+		"{{TOTAL_PROGRAMS}}":               fmt.Sprintf("%.0f", TOTAL_PROGRAMS),
+		"{{SAFE_HARBOUR_FULL}}":            fmt.Sprintf("%.0f", SAFE_HARBOUR_FULL),
 		"{{SAFE_HARBOUR_FULL_PERCENT}}":    fmt.Sprintf("%.5f", SAFE_HARBOUR_FULL_PERCENT) + "%",
-		"{{SAFE_HARBOUR_PARTIAL}}":         fmt.Sprintf("%i", SAFE_HARBOUR_PARTIAL),
+		"{{SAFE_HARBOUR_PARTIAL}}":         fmt.Sprintf("%.0f", SAFE_HARBOUR_PARTIAL),
 		"{{SAFE_HARBOUR_PARTIAL_PERCENT}}": fmt.Sprintf("%.5f", SAFE_HARBOUR_PARTIAL_PERCENT) + "%",
-		"{{HALL_OF_FAME}}":                 fmt.Sprintf("%i", HALL_OF_FAME),
+		"{{HALL_OF_FAME}}":                 fmt.Sprintf("%.0f", HALL_OF_FAME),
 		"{{HALL_OF_FAME_PERCENT}}":         fmt.Sprintf("%.5f", HALL_OF_FAME_PERCENT) + "%",
-		"{{SWAG}}":                         fmt.Sprintf("%i", SWAG),
+		"{{SWAG}}":                         fmt.Sprintf("%.0f", SWAG),
 		"{{SWAG_PERCENT}}":                 fmt.Sprintf("%.5f", SWAG_PERCENT) + "%",
 	}
 
@@ -138,5 +138,3 @@ func main() {
 	exec.Command("perl", "oysttyer.pl", "-status=\""+tweetContent+"\"").Run()
 	fmt.Println(tweetContent)
 }
-
-// "{{SAFE_HARBOUR_FULL_PERCENT}}":    fmt.Sprintf("%.5f", SAFE_HARBOUR_FULL_PERCENT)[0:5] + "%",
