@@ -125,16 +125,16 @@ func main() {
 	replacements := map[string]string{
 		"{{MAIN_LINK}}":                    MAIN_LINK,
 		"{{BOUNTY}}":                       fmt.Sprintf("%.0f", BOUNTY),
-		"{{BOUNTY_PERCENT}}":               fmt.Sprintf("%.5f", BOUNTY_PERCENT) + "%",
+		"{{BOUNTY_PERCENT}}":               fmt.Sprintf("%.1f", BOUNTY_PERCENT) + "%",
 		"{{TOTAL_PROGRAMS}}":               fmt.Sprintf("%.0f", TOTAL_PROGRAMS),
 		"{{SAFE_HARBOUR_FULL}}":            fmt.Sprintf("%.0f", SAFE_HARBOUR_FULL),
-		"{{SAFE_HARBOUR_FULL_PERCENT}}":    fmt.Sprintf("%.5f", SAFE_HARBOUR_FULL_PERCENT) + "%",
+		"{{SAFE_HARBOUR_FULL_PERCENT}}":    fmt.Sprintf("%.1f", SAFE_HARBOUR_FULL_PERCENT) + "%",
 		"{{SAFE_HARBOUR_PARTIAL}}":         fmt.Sprintf("%.0f", SAFE_HARBOUR_PARTIAL),
-		"{{SAFE_HARBOUR_PARTIAL_PERCENT}}": fmt.Sprintf("%.5f", SAFE_HARBOUR_PARTIAL_PERCENT) + "%",
+		"{{SAFE_HARBOUR_PARTIAL_PERCENT}}": fmt.Sprintf("%.1f", SAFE_HARBOUR_PARTIAL_PERCENT) + "%",
 		"{{HALL_OF_FAME}}":                 fmt.Sprintf("%.0f", HALL_OF_FAME),
-		"{{HALL_OF_FAME_PERCENT}}":         fmt.Sprintf("%.5f", HALL_OF_FAME_PERCENT) + "%",
+		"{{HALL_OF_FAME_PERCENT}}":         fmt.Sprintf("%.1f", HALL_OF_FAME_PERCENT) + "%",
 		"{{SWAG}}":                         fmt.Sprintf("%.0f", SWAG),
-		"{{SWAG_PERCENT}}":                 fmt.Sprintf("%.5f", SWAG_PERCENT) + "%",
+		"{{SWAG_PERCENT}}":                 fmt.Sprintf("%.1f", SWAG_PERCENT) + "%",
 	}
 
 	for k, v := range replacements {
