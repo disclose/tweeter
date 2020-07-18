@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os/exec"
 	"strings"
 
 	"github.com/dghubble/go-twitter/twitter"
@@ -30,17 +29,6 @@ type item struct {
 	safe_harbor    string `json:"safee_harbor"`
 }
 
-func getBitlyClient() *bitlinks.Bitlinks {
-	dat, err := exec.Command("./bitly_access_token.sh").Output()
-
-	if err != nil {
-		fmt.Println("Could not read from bitly access token file")
-		panic(err)
-	}
-	client := bitly.NewClient().WithAccessToken(string(dat))
-	return bitlinks.New(client)
-}
-
 func main() {
 	resp, err := http.Get("https://raw.githubusercontent.com/disclose/disclose/master/program-list/program-list.json")
 
@@ -61,7 +49,7 @@ func main() {
 		panic(err)
 	}
 
-	btClient := getBitlyClient()
+	btClient := bitlinks.New(bitly.NewClient().WithAccessToken("YOUR BITLY KEY HERE"))
 
 	request := bitlinks.ShortenRequest{
 		LongURL: url2Shorten,
