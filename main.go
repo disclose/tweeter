@@ -26,7 +26,7 @@ type item struct {
 	Bug_bounty     StringBool `json:"bug_bounty"`
 	Swag           StringBool `json:"swag"`
 	Hall_of_fame   StringBool `json:"hall_of_fame"`
-	Safe_harbor    string     `json:"safee_harbor"`
+	Safe_harbor    string     `json:"safe_harbor"`
 }
 
 type StringBool bool
@@ -89,6 +89,7 @@ func main() {
 		swag := item.Swag
 		hall_of_fame := item.Hall_of_fame
 		safe_harbor := item.Safe_harbor
+		// fmt.Println("%v", item)
 		if bounty {
 			BOUNTY++
 		}
