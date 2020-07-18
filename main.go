@@ -19,14 +19,26 @@ const (
 )
 
 type item struct {
-	program_name   string `json:"program_name"`
-	policy_url     string `json:"policy_url"`
-	submission_url string `json:"submission_url"`
-	launch_date    string `json:"launch_date"`
-	bug_bounty     bool   `json:"bug_bounty"`
-	swag           bool   `json:"swag"`
-	hall_of_fame   bool   `json:"hall_of_fame"`
-	safe_harbor    string `json:"safee_harbor"`
+	Program_name   string     `json:"program_name"`
+	Policy_url     string     `json:"policy_url"`
+	Submission_url string     `json:"submission_url"`
+	Launch_date    string     `json:"launch_date"`
+	Bug_bounty     StringBool `json:"bug_bounty"`
+	Swag           StringBool `json:"swag"`
+	Hall_of_fame   StringBool `json:"hall_of_fame"`
+	Safe_harbor    string     `json:"safee_harbor"`
+}
+
+type StringBool bool
+
+func (b *StringBool) UnmarshalJSON(data []byte) error {
+	asString := string(data)
+	if asString == "true" {
+		*b = true
+	} else {
+		*b = false
+	}
+	return nil
 }
 
 func main() {
@@ -43,11 +55,14 @@ func main() {
 		panic(err)
 	}
 
+	// fmt.Println(string(body))
 	jsonFeed := []item{}
 	err = json.Unmarshal(body, &jsonFeed)
 	if err != nil {
 		panic(err)
 	}
+
+	// fmt.Println(fmt.Sprintf("%v", jsonFeed))
 
 	btClient := bitlinks.New(bitly.NewClient().WithAccessToken("YOUR BITLY KEY HERE"))
 
@@ -61,6 +76,7 @@ func main() {
 	}
 
 	MAIN_LINK := bitlyRes.Link
+	// MAIN_LINK := "main.link.com"
 	TOTAL_PROGRAMS := float64(len(jsonFeed))
 	BOUNTY := 0.0
 	SWAG := 0.0
@@ -69,10 +85,10 @@ func main() {
 	SAFE_HARBOUR_PARTIAL := 0.0
 
 	for _, item := range jsonFeed {
-		bounty := item.bug_bounty
-		swag := item.swag
-		hall_of_fame := item.hall_of_fame
-		safe_harbor := item.safe_harbor
+		bounty := item.Bug_bounty
+		swag := item.Swag
+		hall_of_fame := item.Hall_of_fame
+		safe_harbor := item.Safe_harbor
 		if bounty {
 			BOUNTY++
 		}
@@ -107,7 +123,7 @@ func main() {
 
 	replacements := map[string]string{
 		"{{MAIN_LINK}}":                    MAIN_LINK,
-		"{{BOUNTY}}":                       fmt.Sprintf("%.0fi", BOUNTY),
+		"{{BOUNTY}}":                       fmt.Sprintf("%.0f", BOUNTY),
 		"{{BOUNTY_PERCENT}}":               fmt.Sprintf("%.5f", BOUNTY_PERCENT) + "%",
 		"{{TOTAL_PROGRAMS}}":               fmt.Sprintf("%.0f", TOTAL_PROGRAMS),
 		"{{SAFE_HARBOUR_FULL}}":            fmt.Sprintf("%.0f", SAFE_HARBOUR_FULL),
@@ -125,6 +141,7 @@ func main() {
 	}
 
 	tweetContent := rawMessage
+	fmt.Println(tweetContent)
 
 	config := oauth1.NewConfig("consumerKey", "consumerSecret")
 	token := oauth1.NewToken("accessToken", "accessSecret")

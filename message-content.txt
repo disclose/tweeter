@@ -1,0 +1,13 @@
+New VDPs and #bugbounty programs at {{MAIN_LINK}}!
+
+Total: {{TOTAL_PROGRAMS}}
+Full safe harbor: {{SAFE_HARBOUR_FULL}} ({{SAFE_HARBOUR_FULL_PERCENT}})
+Partial safe harbor: {{SAFE_HARBOUR_PARTIAL}} ({{SAFE_HARBOUR_PARTIAL_PERCENT}})
+
+w/ Bounties: {{BOUNTY}} ({{BOUNTY_PERCENT}})
+w/ HOF: {{HALL_OF_FAME}} ({{HALL_OF_FAME_PERCENT}})
+w/ Swag: {{SWAG}} ({{SWAG_PERCENT}})
+
+Missing yours? Submit a PR!
+
+#bugbountytips #infosec #cybersecurity
