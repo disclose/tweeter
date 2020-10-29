@@ -21,11 +21,11 @@ const (
 type item struct {
 	Program_name   string     `json:"program_name"`
 	Policy_url     string     `json:"policy_url"`
-	Submission_url string     `json:"submission_url"`
+	Submission_url string     `json:"contact_url"`
 	Launch_date    string     `json:"launch_date"`
-	Bug_bounty     StringBool `json:"bug_bounty"`
-	Swag           StringBool `json:"swag"`
-	Hall_of_fame   StringBool `json:"hall_of_fame"`
+	Bug_bounty     string     `json:"offers_bounty"`
+	Swag           StringBool `json:"offers_swag"`
+	Hall_of_fame   string     `json:"hall_of_fame"`
 	Safe_harbor    string     `json:"safe_harbor"`
 }
 
@@ -42,7 +42,7 @@ func (b *StringBool) UnmarshalJSON(data []byte) error {
 }
 
 func main() {
-	resp, err := http.Get("https://raw.githubusercontent.com/disclose/disclose/master/program-list/program-list.json")
+	resp, err := http.Get("https://raw.githubusercontent.com/disclose/diodb/master/program-list/program-list.json")
 
 	if err != nil {
 		panic(err)
@@ -90,13 +90,13 @@ func main() {
 		hall_of_fame := item.Hall_of_fame
 		safe_harbor := item.Safe_harbor
 		// fmt.Println("%v", item)
-		if bounty {
+		if bounty == "yes" || bounty == "partial" {
 			BOUNTY++
 		}
 		if swag {
 			SWAG++
 		}
-		if hall_of_fame {
+		if len(hall_of_fame) > 0 {
 			HALL_OF_FAME++
 		}
 		if safe_harbor == "full" {
