@@ -42,7 +42,7 @@ func (b *StringBool) UnmarshalJSON(data []byte) error {
 }
 
 func main() {
-	resp, err := http.Get("https://raw.githubusercontent.com/disclose/diodb/master/program-list/program-list.json")
+	resp, err := http.Get("https://raw.githubusercontent.com/disclose/diodb/master/program-list.json")
 
 	if err != nil {
 		panic(err)
